@@ -127,6 +127,7 @@
             attribute: attr,
             value: value,
             validator: validatorName,
+            validators: validators,
             globalOptions: options,
             attributes: attributes,
             options: validatorOptions,
@@ -652,7 +653,8 @@
         if (error[0] === '^') {
           error = error.slice(1);
         } else if (options.fullMessages !== false) {
-          error = v.capitalize(v.prettify(errorInfo.attribute)) + " " + error;
+            var displayAttribute = (errorInfo.validators ? errorInfo.validators.displayName : null) || errorInfo.attribute
+            error = v.capitalize(v.prettify(displayAttribute)) + " " + error;
         }
         error = error.replace(/\\\^/g, "^");
         error = v.format(error, {value: v.stringifyValue(errorInfo.value)});
@@ -764,6 +766,7 @@
   });
 
   validate.validators = {
+    displayName: function() {},
     // Presence validates that the value isn't empty
     presence: function(value, options) {
       options = v.extend({}, this.options, options);
